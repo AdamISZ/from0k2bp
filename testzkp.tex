@@ -713,12 +713,11 @@ it follows that he must have it in the first place! In the real world,
 malware aside, the Prover is interacting and will not allow breaking of
 his own rules, but that fact doesn't invalidate the above reasoning.
 
-%\begin{figure}
-%\centering
-%\includegraphics[width=0.9\textwidth]{extractorgod5.eps}
-%\caption{Illustration 1: God (the Extractor) stealing the secret (\$)
-%from the Prover (Machine)}
-%\end{figure}
+\begin{figure}[h]
+\raggedright
+\includegraphics[scale=0.5]{images/extractorgod5.png}
+\caption{\emph{God (the Extractor) stealing the secret (\$) from the Prover (Machine)}}
+\end{figure}
 
 Even God cannot steal \$100 from you if you don't \emph{have} \$100.
 Contrariwise, if you do, he can!
@@ -904,15 +903,13 @@ $\mathbf{x}$) is fixed?
 The most intuitive way to understand it: the vectors $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_m$ can be seen as the
 coefficients of a polynomial $P(e) = \mathbf{x}_0 + \mathbf{x}_1e + \mathbf{x}_2e^2 + \ldots + \mathbf{x}_me^m$. Note that this polynomial is
 vector-valued. Now this set of vectors (= this polynomial) is
-\emph{fixed} by $m+1$ evaluations (see Illustration 2).
+\emph{fixed} by $m+1$ evaluations (see Figure 2).
 
-%\begin{figure}
-%\centering
-%\includegraphics[width=0.5\textwidth]{cryptopapers/PolynomialInterpolation.jpg}
-%\caption{Illustration 2: A polynomial of degree n is fixed by n+1
-%evaluations}
-%\end{figure}
-
+\begin{figure}[h]
+\raggedright
+\includegraphics[scale=0.5]{images/PolynomialInterpolation.jpg}
+\caption{\emph{A polynomial of degree n is fixed by n+1 evaluations}}
+\end{figure}
 It's important (for later parts of this document) to realize that one
 can go further here -- one can assert that even a \emph{single}
 polynomial evaluation of this type may be enough to fix a single vector
@@ -1450,11 +1447,14 @@ list $A_{-4}, A_{-3}, \ldots, A_0=A, \ldots, A_{4}$. Then the verifier replies w
 Sigma protocol, the Prover does not then send back a proof. What happens
 instead is, \textbf{both sides now construct a reduced form of the same
 problem}.
-
-%\includegraphics[width=0.5\textwidth]{cryptopapers/bootlesavings.eps}
+\begin{figure}[h]
+\raggedright
+\includegraphics[scale=0.5]{images/bootlesavings.png}
+\caption{\emph{Compressing commitments - attribution of this image below}}
+\end{figure}
 (Aside:
 Jonathan Bootle illustrated this idea helpfully in this
-{[}\protect\hyperlink{anchor-44}{4}{]}blog post -- see diagram, taken
+{[}\protect\hyperlink{anchor-44}{4}{]}blog post -- see Figure 3, taken
 from that post -- this gives you the mental model of what's going on;
 we're repeatedly shrinking the size of the proof we'll have to finally
 create before the final step (the envelopes represent commitments)):
