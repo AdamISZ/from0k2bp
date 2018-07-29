@@ -254,40 +254,20 @@ before later proving it to be true, which enables a bunch of interesting
 types of systems to work.
 
 Commitments are only possible because of the existence of one-way
-functions; you need to be able
-
-to produce an output that doesn't, on its own, reveal the input.
-Cryptographic hash functions (like
-
-SHA256) perform this role perfectly. If I want to commit to the value
-``2'', I can send you its hash:
+functions; you need to be able to produce an output that doesn't, on its own, reveal the input.
+Cryptographic hash functions (like SHA256) perform this role perfectly. If I want to commit to the value ``2'', I can send you its hash:
 
 53c234e5e8472b6ac51c1ae1cab3fe06fad053beb8ebfd8977b010655bfdd3c3
 
 This wouldn't be too smart though; it would mean whenever I want to send
-you a commitment to the
-
-value ``2'', I would always be sending 53....c3 - which wouldn't hide
-the value very well! This is a lack of what's called ``semantic
-security''. However, it's pretty easy to address this.
+you a commitment to the value ``2'', I would always be sending 53....c3 - which wouldn't hide
+the value very well! This is a lack of what's called ``semantic security''. However, it's pretty easy to address this.
 
 Instead of committing to ``2'', I commit to ``2''+some random data, like
-``2xyzabc''. To put it more
+``2xyzabc''. To put it more generally, we decide on a format like: SHA256(secret number
+\textbar{}\textbar{} 6 random characters), just for example (the real life version will be more secure of course). Because SHA256 has the property that you can't generate ``collisions'' (can't create two inputs with the same output), this still gives us the same essential security feature: once I've made the commitment, I can't change my mind on what the value is later - and you can ask me to reveal it at a later stage of a protocol/system.
 
-generally, we decide on a format like: SHA256(secret number
-\textbar{}\textbar{} 6 random characters), just for example
-
-(the real life version will be more secure of course). Because SHA256
-has the property that you can't
-
-generate ``collisions'' (can't create two inputs with the same output),
-this still gives us the same essential security feature: once I've made
-the commitment, I can't change my mind on what the value is later - and
-you can ask me to reveal it at a later stage of a protocol/system.
-
-Notice that by combining a hash function with an extra piece of random
-data, we have achieved what are known as the two key properties of any
-commitment scheme:
+Notice that by combining a hash function with an extra piece of random data, we have achieved what are known as the two key properties of any commitment scheme:
 
 \begin{itemize}
 \tightlist
@@ -298,27 +278,12 @@ commitment scheme:
   and open it as a commitment to a different message $m'$.
 \end{itemize}
 
-\textbf{This is a counterintuitive achievement, so make sure you get it
-before going further }- I can choose a random number that I don't reveal
-to you in advance and append it to my message ``2'', and even so,
+\textbf{This is a counterintuitive achievement, so make sure you get it before going further }- I can choose a random number that I don't reveal to you in advance and append it to my message ``2'', and even so, I still can't go back on my commitment. Because the output I create, the
+hash value, is absolutely impossible for me to regenerate with any other message and random
+number. That's the power of cryptographic hashes (in practice, what's needed for that is called
+`second preimage resistance' - you can't create a second input for an existing (input, output) pair -- which is easier for a hash function to achieve than full collision resistance, but a hash function is not considered cryptographically safe unless it has the latter).
 
-I still can't go back on my commitment. Because the output I create, the
-hash value, is absolutely
-
-impossible for me to regenerate with any other message and random
-number. That's the power of
-
-cryptographic hashes (in practice, what's needed for that is called
-`second preimage resistance' - you can't create a second input for an
-existing (input, output) pair -- which is easier for a hash function to
-achieve than full collision resistance, but a hash function is not
-considered cryptographically safe unless it has the latter).
-
-So, a hash function provides the equipment to make commitments. However,
-what hash functions certainly don't have is any kind of homomorphism.
-There is certainly no rule like $\textrm{SHA256}(a) + \textrm{SHA256}(b) = \textrm{SHA256}(a+b)$. So this is no good for our purposes,
-because we are going to need a \emph{homomorphic commitment scheme} for
-the techniques we're going to use.
+So, a hash function provides the equipment to make commitments. However, what hash functions certainly don't have is any kind of homomorphism. There is certainly no rule like $\textrm{SHA256}(a) + \textrm{SHA256}(b) = \textrm{SHA256}(a+b)$. So this is no good for our purposes, because we are going to need a \emph{homomorphic commitment scheme} for the techniques we're going to use.
 
 \hypertarget{a-pedersen-commitment-in-elliptic-curve-form}{%
 \subsection[A Pedersen commitment in elliptic curve
@@ -529,6 +494,8 @@ V → P: $e$ (a random scalar)
 P → V: $(\textbf{z}, s)$(a single vector of dimension $N$, and another scalar)
 
 These last two are calculated as:
+
+\[\mathbf{z} = \sum\limits_{i=0}^{m} e^{i}\mathbf{x}_{i}, \quad s = \sum\limits_{i=0}^{m}e^{i}r_{i}\]
 
 Note that the summations start at 0; this means that the sums include
 the extra, random commitment, indexed 0, that was created as the first
@@ -769,7 +736,7 @@ underdetermined, i.e. it will give us a unique solution. In more detail:
 As for the Schnorr case, we have the Extractor start the Prover, who
 generates here a $C_0$, then provide it with a random challenge $e$, then
 retrieve from it a pair $(\mathbf{z}, s)$. Assuming that this response is
-valid, we can repeat the process, a total of times, resulting in this
+valid, we can repeat the process, a total of $m+1$ times, resulting in this
 set of transcripts:
 \begin{align*}
 &(C_{0,1}, e_1, (\mathbf{z}_1 , s_1)) \\
@@ -1738,7 +1705,7 @@ product}{Re-introducing the inner product}}\label{re-introducing-the-inner-produ
 Bünz's paper separates this into two parts. First, he modifies the above
 construction to include an explicit value of the inner product of the
 two vectors, then he overlays a simple additional step to enforce that
-overlay explcitly(see ``Protocol 1'' and ``Protocol 2''; Protocol 2 is
+overlay explicitly (see ``Protocol 1'' and ``Protocol 2''; Protocol 2 is
 the actual proof while Protocol 1 enforces the value of the inner
 product and calls Protocol 2 as a subroutine).
 
