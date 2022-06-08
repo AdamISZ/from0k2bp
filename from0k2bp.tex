@@ -1448,7 +1448,7 @@ matrix; we'll see in a minute why this is particularly useful; note that
 the total number of such commitments is $2\times 5 -1$, including the main
 diagonal which is already known as $A$. The formula for the diagonals is:
 \begin{align}
-A_k = \sum\limits_{\textrm{max}(1, 1-k)}^{\textrm{min}(5, 5-k)} \textbf{a}_{i+k}\textbf{G}_i \quad \textrm{for }\ k=-4,-3,..,0,..,3,4 \label{condensing-vector-diagonals-A_k:1}
+A_k = \sum\limits_{i=\textrm{max}(1, 1-k)}^{\textrm{min}(5, 5-k)} \textbf{a}_{i+k}\textbf{G}_i \quad \textrm{for }\ k=-4,-3,..,0,..,3,4 \label{condensing-vector-diagonals-A_k:1}
 \end{align}
 It's pretty fiddly but if you work through it carefully, you'll see that
 this will provide $9\ (= 2\times 5 -1)$ commitments. One for each of the
@@ -1512,10 +1512,10 @@ of terms which are multiplied by the same power of $x$. To validate the
 correspondence between $A$ and $A'$, a Verifier will need to check that the
 entire set (``matrix'') of terms; to do this he checks whether:
 \begin{align*}
-A' = \sum\limits_{\textrm{max}(1, 1-k)}^{\textrm{min}(5, 5-k)}x^k A_k 
+A' = \sum\limits_{k=-4}^{4}x^k A_k
    \stackrel{\text{(see }\eqref{condensing-vector-diagonals-A_k:1}\text{)}}{=} 
-   \sum\limits_{\textrm{max}(1, 1-k)}^{\textrm{min}(5, 5-k)} x^k 
-   \textbf{a}_{i+k}\textbf{G}_i \quad \textrm{for }\ k=-4,-3,..,0,..,3,4
+   \sum\limits_{k=-4}^{4}x^k\sum\limits_{i=\textrm{max}(1, 1-k)}^{\textrm{min}(5, 5-k)}
+   \textbf{a}_{i+k}\textbf{G}_i
 \end{align*}
 Verifier only checks the left equation of course; the full decomposition is
 known only to the Prover.
