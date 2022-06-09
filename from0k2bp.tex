@@ -1216,42 +1216,88 @@ thanks to definition \eqref{inner_product_response_step_data:1}.
 Note that the same procedure can be applied to extract $\mathbf{y}$ and~$\mathbf{d}_y$.
 
 However, to go to the final step, we also need to get the opening of the
-commitment $C_z$ to $z$. This is a little more involved but follows the same
-concept: take the two transcripts, cancel then rearrange the equation so
-that commitment is the subject, and observe the content of the
-coefficient of $G$, using the binding property observe that that must be
-the opening (and making use of the ability to cross multiply by an
-inverse scalar):
-\begin{align}
-& t_z H + \left(\textbf{f}_x \cdot \textbf{f}_y \right) G = e^2 C_z + e C_1 + C_0 
-  \label{inner_proof_product_knowledge_soundness_Cz:1} \\
-& t_z' H + \left(\textbf{f}_x' \cdot \textbf{f}_y' \right) G = e'^2 C_z + e' C_1 + C_0  
-\label{inner_proof_product_knowledge_soundness_Cz:2}
-\end{align}
-Let us remind ourselves of the definitions:
+commitment $C_z$ to $z$. This is a little more involved and requires a third
+transcript:
 \begin{align*}
-C_z &= tH + zG \\
-C_1 &= t_1 H + \left(\textbf{x} \cdot \textbf{d}_y + \textbf{y} \cdot \textbf{d}_x \right)G
+& t_z H + \left(\textbf{f}_x \cdot \textbf{f}_y \right) G = e^2 C_z + e C_1 + C_0 \\
+& t_z' H + \left(\textbf{f}_x' \cdot \textbf{f}_y' \right) G = e'^2 C_z + e' C_1 + C_0 \\
+& t_z'' H + \left(\textbf{f}_x'' \cdot \textbf{f}_y'' \right) G = e''^2 C_z + e'' C_1 + C_0
 \end{align*}
-Now let's subtract \eqref{inner_proof_product_knowledge_soundness_Cz:1} and 
-\eqref{inner_proof_product_knowledge_soundness_Cz:2} and let's take a look at the coefficient of $G$:
-\begin{align}
-&  \left(\textbf{f}_x \cdot \textbf{f}_y - \textbf{f}_x' \cdot \textbf{f}_y'\right) G = 
-\left(e^2 - e'^2\right)zG + \left(e-e'\right)\left(\textbf{x} \cdot \textbf{d}_y + 
-\textbf{y} \cdot \textbf{d}_x \right)G
-\end{align}
-Previous equation implies:
-\begin{align}
-& \left(e^2 - e'^2\right)zG = \left(\left(\textbf{f}_x \cdot \textbf{f}_y - 
-\textbf{f}_x' \cdot \textbf{f}_y'\right) -  \left(e-e'\right)\left(\textbf{x} \cdot \textbf{d}_y + 
-\textbf{y} \cdot \textbf{d}_x \right)\right) G
-\end{align}
-Let $\gamma = \left(e^2 - e'^2\right)^{-1}$:
-\begin{align}
-& z = \gamma\left(\left(\textbf{f}_x \cdot \textbf{f}_y - 
-\textbf{f}_x' \cdot \textbf{f}_y'\right) -  \left(e-e'\right)\left(\textbf{x} \cdot \textbf{d}_y + 
-\textbf{y} \cdot \textbf{d}_x \right)\right)
-\end{align}
+We can express this system of equations in matrix form:
+
+\[
+\begin{pmatrix}
+t_z & \textbf{f}_x \cdot \textbf{f}_y \\
+t_z' & \textbf{f}_x' \cdot \textbf{f}_y' \\
+t_z'' & \textbf{f}_x'' \cdot \textbf{f}_y'' \\
+\end{pmatrix}
+\begin{pmatrix}
+H\\
+G\\
+\end{pmatrix}
+=\begin{pmatrix}
+1 & e & e^2 \\
+1 & e' & e'^2 \\
+1 & e'' & e''^2 \\
+\end{pmatrix}
+\begin{pmatrix}
+C_0\\
+C_1\\
+C_z\\
+\end{pmatrix}
+\]
+As noted in Section \ref{knowledge-soundness-does-a-verifying-interaction-actually-prove-knowledge-of-the-vectors},
+the Vandermonde matrix with powers of $e, e', e''$ is invertible as long as $e, e', e''$ are
+all different, so we can multiply both sides by its inverse:
+
+\[
+\begin{pmatrix}
+1 & e & e^2 \\
+1 & e' & e'^2 \\
+1 & e'' & e''^2 \\
+\end{pmatrix}^{-1}
+\begin{pmatrix}
+t_z & \textbf{f}_x \cdot \textbf{f}_y \\
+t_z' & \textbf{f}_x' \cdot \textbf{f}_y' \\
+t_z'' & \textbf{f}_x'' \cdot \textbf{f}_y'' \\
+\end{pmatrix}
+\begin{pmatrix}
+H\\
+G\\
+\end{pmatrix}
+=
+\begin{pmatrix}
+C_0\\
+C_1\\
+C_z\\
+\end{pmatrix}
+\]
+Next, we can perform the matrix multiplication to get a $3 \times 2$ matrix. Note that for
+brevity, we are using placeholder variables $\alpha_{i,j}$ for the result instead of
+performing the explicit calculation:
+\[
+\begin{pmatrix}
+\alpha_{1,1} & \alpha_{1,2} \\
+\alpha_{2,1} & \alpha_{2,2} \\
+\alpha_{3,1} & \alpha_{3,2}
+\end{pmatrix}
+\begin{pmatrix}
+H\\
+G\\
+\end{pmatrix}
+=
+\begin{pmatrix}
+C_0\\
+C_1\\
+C_z\\
+\end{pmatrix}
+\]
+Finally, we can write $C_z$ in terms of $H$ and $G$ by considering the
+third row of the matrix equation:
+\[
+\alpha_{3,1}H + \alpha_{3,2}G = C_z
+\]
+Thus $z = \alpha_{3,2}$ gives us an opening for the commitment $C_z$.
 
 Proving that $z = \mathbf{x}\cdot\mathbf{y}$ is a little different. Note that, we \emph{expect} of
 course that this equation is true, but the above argument doesn't
