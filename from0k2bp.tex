@@ -746,13 +746,12 @@ underdetermined, i.e. it will give us a unique solution. In more detail:
 As for the Schnorr case, we have the Extractor start the Prover, who
 generates here a $C_0$, then provide it with a random challenge $e$, then
 retrieve from it a pair $(\mathbf{z}, s)$. Assuming that this response is
-valid, we can repeat the process, a total of $m+1$ times, resulting in this
-set of transcripts:
+valid, we can repeat the process (with the same $C_0$, as earlier for $R$), a total of $m+1$ times, resulting in this set of transcripts:
 \begin{align*}
-&(C_{0,1}, e_1, (\mathbf{z}_1 , s_1)) \\
-&(C_{0,2}, e_2, (\mathbf{z}_2 , s_2)) \\
+&(C_0, e_0, (\mathbf{z}_0 , s_0)) \\
+&(C_0, e_1, (\mathbf{z}_1 , s_1)) \\
 &\ldots \\
-&(C_{0,m}, e_m, (\mathbf{z}_m , s_m)) \\
+&(C_0, e_m, (\mathbf{z}_m , s_m)) \\
 \end{align*}
 The Extractor now effectively uses this data as a set of linear
 equations that it can solve to extract the values of the commited
