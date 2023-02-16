@@ -1566,9 +1566,9 @@ to reveal if we did it without shenanigans.
 
 But for the case $600 = 10 \times 10 \times 6$ - we first ``chunk'' in 10s, then
 again in 10s, leaving only 6 components for the final step. That
-requires revealing $2\times 10-1 = 19$ commitments at each of the two reducing
+requires revealing $2\times (10 - 2) = 18$ commitments at each of the two reducing
 steps, along with 6~scalars in the final step (and again subtract 1 for
-the starting $A$). That'd be only 43 items instead of 600.
+the starting $A$). That'd be only 42 items instead of 600.
 
 So far so good -- it clearly saves space, but we've left a big hole in
 the argument; does this actually have \emph{knowledge soundness}?
@@ -1863,7 +1863,7 @@ start with vectors length $n$, $C = zG + \textbf{aG} + \textbf{bH}$, pass this t
 receive back a challenge $x$, both sides recalculate $C'$, continue until a
 final step (each step a halving and a new $L, R$), and in the last step reveal
 scalars for the now single values $a, b$, and the Verifier makes the final
-check that $C^{*} = a^{*}b^{*}G + a^{*}G_1 + b^{*}H_1$, where * indicates the $\log_2n$-th transformed values.
+check that $C^{*} = (a^{*} \cdot b^{*})G + a^{*}G_1 + b^{*}H_1$, where * indicates the $\log_2n$-th transformed values.
 
 As we mentioned at the start, to tweak this to create an argument of
 knowledge that a given $z$ is the inner product of the committed vectors,
@@ -2143,7 +2143,7 @@ Refer back to the definitions of those two vectors in terms of $\textbf{a}_L, \t
 can see that this requires:
 \begin{align*}
 & \textbf{H}' = \textbf{y}^{-n}\textbf{H} \\
-& P = A + xS -zG + \left(z\textbf{y}^n + z^2\textbf{2}^n\right)\textbf{H}' \\
+& P = A + xS -z\textbf{G} + \left(z\textbf{y}^n + z^2\textbf{2}^n\right)\textbf{H}' \\
 & P \stackrel{?}{=} \ \mu H + \textbf{lG} + \textbf{rH}' \\
 \end{align*}
 
@@ -2334,7 +2334,7 @@ these 3 conditions are true.
 \textbf{Stage 1}: Openings of $\alpha, \rho, \textbf{a}_L, \textbf{a}_R, \textbf{s}_L, \textbf{s}_R$
 
 Remembering that P is defined as $\mu H + \textbf{lG} + \textbf{rH}'$, and noting its construction by the
-verifier as $P = A + xS -zG + \left(z\textbf{y}^n + z^2\textbf{2}^n\right)\textbf{H}'$, we will compare the two. For the first challenge $x_1$, this
+verifier as $P = A + xS -z\textbf{G} + \left(z\textbf{y}^n + z^2\textbf{2}^n\right)\textbf{H}'$, we will compare the two. For the first challenge $x_1$, this
 will look like:
 \[P_1 = \mu_1 H + \textbf{l}_1\textbf{G} + \textbf{r}_1\textbf{H}' = A + x_1S -z\textbf{G} + (z\textbf{y}^n+z^2\textbf{2}^n)\textbf{H}'\]
 Do likewise for $x_2$. Now consider the ``coefficients'' (recall the idea
@@ -2353,11 +2353,11 @@ Then consider coefficients of $\mathbf{G}$:
 And finally for $\mathbf{H}'$ (note that these curve points are fixed for fixed $y$, as
 here):
 \begin{align*}
-& \textbf{l}_1 = \textbf{a}_R + x_1\textbf{s}_R +k \\
-& \textbf{l}_2 = \textbf{a}_R + x_2\textbf{s}_R +k \\
+& \textbf{r}_1 = \textbf{a}_R + x_1\textbf{s}_R +k \\
+& \textbf{r}_2 = \textbf{a}_R + x_2\textbf{s}_R +k \\
 &\textrm{solve:}\quad \textbf{a}_R, \textbf{s}_R \\
 \end{align*}
-where $k$ is just the remaining terms for $\mathbf{H}'$, and is constant.
+where $k$ is just the remaining terms for $\mathbf{H}'$, which are constant.
 
 Now we have explicit openings for $\alpha, \rho, \textbf{a}_L, \textbf{a}_R, \textbf{s}_L, \textbf{s}_R$.
 
@@ -2434,7 +2434,7 @@ verification conditions hold. As a reminder, the verifications, ignoring
 the inner product proof were:
 \begin{align*}
 & \hat{t}G + \tau_x H \stackrel{?}{=} \quad z^2V + \delta(y, z) G + xT_1 + x^2T_2 \\
-&  A + xS -zG + \left(z\textbf{y}^n + z^2\textbf{2}^n\right)\textbf{H}' \stackrel{?}{=} \ \mu H + \textbf{lG} + \textbf{rH}' \\
+&  A + xS -z\textbf{G} + \left(z\textbf{y}^n + z^2\textbf{2}^n\right)\textbf{H}' \stackrel{?}{=} \ \mu H + \textbf{lG} + \textbf{rH}' \\
 \end{align*}
 Remember that the public commitment $V$ is only checked in the first of the
 above two equations; so forging that equation successfully is the main
@@ -2445,7 +2445,7 @@ To make the second equation verify, the one that checks the validity of
 the commitment $P$, we can choose random $A, \mu, \textbf{l}, \textbf{r}$ in addition to the other random
 values already mentioned, and ensure that $\hat{t} = \textbf{l}\cdot \textbf{r}$, and set the commitment $S$ to
 value:
-\[S = x^{-1}\left(\mu H + zG + \textbf{lG} + (\textbf{r} -z\textbf{y}^n -z^2\textbf{2}^n)\textbf{H}' -A\right)\]
+\[S = x^{-1}\left(\mu H + z\textbf{G} + \textbf{lG} + (\textbf{r} -z\textbf{y}^n -z^2\textbf{2}^n)\textbf{H}' -A\right)\]
 Then the transcript $((A, S^*), y, z, (T_1^*, T_2), x, (\hat{t}, \mu, \tau_x))$ will verify, where we use * to indicate calculated
 values, and all other values are randomly selected, if we create
 additional random vectors $\mathbf{l}, \mathbf{r}$ such that their dot product is $\hat{t}$.
