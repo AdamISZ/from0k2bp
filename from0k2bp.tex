@@ -1566,9 +1566,9 @@ to reveal if we did it without shenanigans.
 
 But for the case $600 = 10 \times 10 \times 6$ - we first ``chunk'' in 10s, then
 again in 10s, leaving only 6 components for the final step. That
-requires revealing $2\times 10-1 = 19$ commitments at each of the two reducing
+requires revealing $2\times (10 - 2) = 18$ commitments at each of the two reducing
 steps, along with 6~scalars in the final step (and again subtract 1 for
-the starting $A$). That'd be only 43 items instead of 600.
+the starting $A$). That'd be only 42 items instead of 600.
 
 So far so good -- it clearly saves space, but we've left a big hole in
 the argument; does this actually have \emph{knowledge soundness}?
