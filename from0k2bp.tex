@@ -1863,7 +1863,7 @@ start with vectors length $n$, $C = zG + \textbf{aG} + \textbf{bH}$, pass this t
 receive back a challenge $x$, both sides recalculate $C'$, continue until a
 final step (each step a halving and a new $L, R$), and in the last step reveal
 scalars for the now single values $a, b$, and the Verifier makes the final
-check that $C^{*} = a^{*}b^{*}G + a^{*}G_1 + b^{*}H_1$, where * indicates the $\log_2n$-th transformed values.
+check that $C^{*} = (a^{*} \cdot b^{*})G + a^{*}G_1 + b^{*}H_1$, where * indicates the $\log_2n$-th transformed values.
 
 As we mentioned at the start, to tweak this to create an argument of
 knowledge that a given $z$ is the inner product of the committed vectors,
